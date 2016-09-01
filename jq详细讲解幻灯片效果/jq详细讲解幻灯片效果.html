@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<base href="http://img30.360buyimg.com/da/jfs/" />
+
+<title>我的幻灯片</title>
+
+<script src="http://wuover.qiniudn.com/jquery.js"></script>
+
+</head>
+<!--------------------------------这是css开始---------------------------------- -->
+
+<style>
+
+*{list-style:none;margin:0;padding:0;}
+
+.huandengpian{text-align:center;}
+
+.pic_ul{position:relative;width:800px;margin:0 auto;overflow:hidden;height:400px;}
+
+.pic_ul li{position:absolute;}
+
+.pic_ul li,.pic_ul li img{width:100%;height:100%;}
+
+.num_ul li{width:30px;height:30px;float:left;border-radius:50%;background:white;color:red;line-height:30px;cursor:pointer;margin-left:3px;}
+
+.num_ul li.numat{background:red;color:white;}
+
+.num_ul {width: 200px;height: 40px;margin: 0 auto;margin-top:-35px;position: absolute;left: 50%;margin-left: -100px;}
+
+.prenext{width:800px;left:50%;margin-left:-400px;margin-top:-220px;position:absolute;}
+
+.pic_pre,.pic_next{width:50px;height:50px;background:black;}
+
+.pic_pre{float:left;}.pic_next{float:right;}
+
+</style>
+<!--------------------------------这是html开始---------------------------------- -->
+
+<body>
+
+<div class="huandengpian">
+
+<ul class="pic_ul">
+
+<li><img src="http://img30.360buyimg.com/da/jfs/t2488/303/91760086/97360/d10da38c/55ed0839Nb5bdf82d.jpg" /></li>
+
+<li><img src="/da/jfs/t1669/344/987295119/97384/d0fbd88e/55e01692N0840af2e.jpg" /></li>
+
+<li><img src="/da/jfs/t1888/100/409186/98404/1de298e9/55e552c3N522609ed.jpg" /></li>
+
+<li><img src="/da/jfs/t2062/361/67028315/89443/d78e7f06/55ebdec1Ne25007c3.jpg" /></li>
+
+<li><img src="/da/jfs/t2128/19/72039547/101559/4be678bd/55ebe1d6N5822ddf0.jpg" /></li>
+
+<li><img src="/da/jfs/t2077/150/61368939/96983/e7b8fd02/55ebb410N21afd376.jpg" /></li>
+
+</ul>
+
+<ul class="prenext">
+
+<li class="pic_pre"></li><li class="pic_next"></li>
+
+</ul>
+
+<ul class="num_ul"><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li></ul>
+
+</div>
+<!--------------------------------这是jq开始---------------------------------- -->
+
+<script>
+
+(function(){//闭包写法，防止外部函数访问内部变量，形成自我保护
+
+var i=0,piclen=$(".pic_ul li").length-1;//需轮播的节点的个数减1，为什么减1自己思考
+
+function i_change(){//处理左右轮播尽头，使循环播放
+if(i>piclen){i=0}else if(i<0)(i=piclen)
+
+}
+
+function show_pic(){/*主方法*/
+
+$(".pic_ul li").eq(i).animate({opacity:1}).siblings().animate({opacity:0});//第i张图片显示，其余同胞节点透明100%
+
+$(".num_ul li").eq(i).addClass("numat").siblings().removeClass("numat");//数字跟随跳动，第i个数字加上numt类名，其余同胞节点移除num类名
+
+}
+
+show_pic();//初始化，刚载入页面的时候i=0，所以显示第一张图片
+
+function chage_myown(){//自动轮播方法
+
+i++;//让i递增1
+
+i_change();//当轮播到最后一张图片的时候，从头开始轮播，可以扩展为反向轮播i--
+
+show_pic();//执行一次主方法
+
+}
+
+$(".num_ul li").click(function(){//点击对应数字改变i值使轮播到对应图片
+
+var myindex=$(this).index();
+
+i=myindex;
+
+clearInterval(zouba);//清除定时器，点击后保持切换衔接的流畅性，同下
+
+show_pic();
+
+zouba=setInterval(chage_myown,3000);//重开定时器，点击后保持切换衔接的流畅性，同下
+
+})
+
+$(".pic_pre").click(function(){//点击一次向左，i减一次1
+
+i-=1;
+
+i_change();
+
+clearInterval(zouba);
+
+show_pic();
+
+zouba=setInterval(chage_myown,3000);
+
+})
+
+$(".pic_next").click(function(){//点击向右按钮，i加一次1
+
+i+=1;
+
+i_change();
+
+clearInterval(zouba);
+
+show_pic();
+
+zouba=setInterval(chage_myown,3000);
+
+})
+
+zouba=setInterval(chage_myown,3000);//设置定时器，开始自动轮播
+
+$(".pic_ul").mouseover(function(){//鼠标放上去，停止轮播
+
+clearInterval(zouba);
+
+})
+
+$(".pic_ul").mouseout(function(){//鼠标移开，继续轮播
+
+zouba=setInterval(chage_myown,3000);
+
+})
+
+})()
+
+</script>
+
+</body>
+
+</html>

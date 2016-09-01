@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+
+<title>我的幻灯片</title>
+
+<script src="http://wuover.qiniudn.com/jquery.js"></script>
+
+</head>
+<!--------------------------------这是css开始---------------------------------- -->
+
+
+<!--------------------------------这是html开始---------------------------------- -->
+
+<body>
+	<div id="content" style="border: 1px solid red;width: 210px"></div>
+    <button onclick="turnPage('weixin.html')">微信</button>
+    <button onclick="turnPage('tongxunlu.html')">通讯录</button>
+    <button onclick="turnPage('zhaopengyou.html')">找朋友</button>
+    <button onclick="turnPage('wo.html')">我</button>
+</body>
+<script type="text/javascript">
+	function ajax(method,url,param,flag,returnFun){
+	  var httpRequest="";
+	  if(window.XMLHttpRequest){
+	    httpRequest=new XMLHttpRequest();
+	  }else if(window.ActiveXObject){
+	    httpRequest=new ActiveXObject("Microsoft.XMLHTTP");
+	  }
+	  httpRequest.onreadystatechange=function(){
+	    if(httpRequest.readyState==4 && httpRequest.status==200){
+	      returnFun(httpRequest.responseText);
+	    }
+	  };
+	  if(method=="get"){
+	    var queryString="";
+	    if(param !="" || param !=null){
+	      queryString="?"+param;
+	    }
+	    httpRequest.open("get",url+queryString,flag);
+	    httpRequest.send(null);
+	  }else if(method=="post"){
+	    httpRequest.open("post",url,flag);
+	    httpRequest.setRequestHeader("content-type","application/x-www-form-urlencoded");
+	    httpRequest.send(param);
+	  }
+	}
+
+	// 封装后的写法：
+	// 参数：1.请求方式 2.请求路径 3.参数传递 4.是否异步刷新 5.回调函数
+	ajax("post","../login.do","username="+username+"&pwd="+pwd,true,function(text){}
+
+	// 第一种用法，对服务器的数据进行操作：
+	var username="jack";
+    var password=123;
+	$.ajax({
+	    type:"post",
+	    url:"../insert.do",
+	    data:"username="+username+"&password="+password,
+	    success:function(msg){
+	      if(msg=="ok"){
+	        alert("complete");
+	      }	
+	    }
+	})
+
+	// 第二种用法，就是如何装载页面：
+    $.ajax({
+        url: "index.html",
+        cache: false,
+        success: function(html){
+            $("#content").html(html);
+        }
+    });
+
+    function turnPage(url){
+    $.ajax({
+      type:"post",
+      url:url,
+      success:function(html){
+        $("#content").html(html);
+      }
+    })
+  }
+</script>
+</html>
